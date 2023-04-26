@@ -50,3 +50,17 @@ func main() {
 go mod init go-learning
 
 ```
+
+## 建议学习顺序
+- learning_var.go
+- learning_const.go
+- learning_if.go
+- learning_for.go
+- learning_switch.go
+- learning_enum.go
+- learning_func.go
+- learning_strconv.go
+- learning_http.go
+- learning_defer.go
+- learning_array.go
+- learning_map.go

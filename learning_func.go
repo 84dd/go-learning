@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"go-learning/src/code.lanym.com/other"
+	"regexp"
+	"strconv"
 )
 
 func main() {
@@ -20,6 +22,34 @@ func main() {
 
 	// 调用其他包的方法
 	other.FinelyPrint("小红", 3)
+
+	// 匿名函数
+	func() {
+		fmt.Println("hello word")
+	}()
+	word := func(age int) string {
+		return "你今年" + strconv.Itoa(age) + "岁了"
+	}(18)
+	fmt.Println(word)
+
+	// 在 go 中，func可以作为参数，也可以作为返回值，也可以创建
+	// 类似js
+	theAgeFun := func(ageStr string) func() int64 {
+		sampleRegexp := regexp.MustCompile(`\d+`)
+		if sampleRegexp.MatchString(ageStr) {
+			return func() int64 {
+				parseInt, _ := strconv.ParseInt(ageStr, 10, 4)
+				return parseInt
+			}
+		} else {
+			return func() int64 {
+				return 0
+			}
+		}
+	}
+	numAge := theAgeFun("12")
+	fmt.Println("转换到的数字年龄为：", numAge())
+
 }
 
 // myFun 定义方法
