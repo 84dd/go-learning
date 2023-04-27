@@ -62,8 +62,8 @@ go mod init go-learning
 - 【字符串与数字互转】learning_strconv.go
 - 【http】learning_http.go
 - 【延迟调用】learning_defer.go
-- 【数组】learning_array.go
+- 【数组、切片】learning_array.go
 - 【map】learning_map.go
-- 【结构体】learning_struct.go
+- 【结构体、对象】learning_struct.go
 - 【指针】learning_point.go
 - 【接口】learning_interface.go
