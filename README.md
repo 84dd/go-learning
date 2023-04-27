@@ -52,15 +52,18 @@ go mod init go-learning
 ```
 
 ## 建议学习顺序
-- learning_var.go
-- learning_const.go
-- learning_if.go
-- learning_for.go
-- learning_switch.go
-- learning_enum.go
-- learning_func.go
-- learning_strconv.go
-- learning_http.go
-- learning_defer.go
-- learning_array.go
-- learning_map.go
+- 【变量】learning_var.go
+- 【常量】learning_const.go
+- 【条件表达式】learning_if.go
+- 【循环】learning_for.go
+- 【switch】learning_switch.go  
+- 【枚举】learning_enum.go
+- 【函数】learning_func.go
+- 【字符串与数字互转】learning_strconv.go
+- 【http】learning_http.go
+- 【延迟调用】learning_defer.go
+- 【数组】learning_array.go
+- 【map】learning_map.go
+- 【结构体】learning_struct.go
+- 【指针】learning_point.go
+- 【接口】learning_interface.go
