@@ -67,3 +67,6 @@ go mod init go-learning
 - 【结构体、对象】learning_struct.go
 - 【指针】learning_point.go
 - 【接口】learning_interface.go
+- 【异常】learning_error.go
+- 【字符串相关】learning_string.go
+- 【正则】learning_regexp.go
