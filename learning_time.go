@@ -11,6 +11,7 @@ func main() {
 	fmt.Println(now)
 	fmt.Println("获取1970-1-1距今的时间（秒）：", now.Unix())
 	fmt.Println("获取1970-1-1距今的时间（纳秒）：", now.UnixNano())
+	fmt.Println("打印毫秒：", time.Now().Format("2006-01-02 15:04:05.000"))
 
 	fmt.Println("睡眠前的时间为", time.Now().Format("2006-01-02 15:04:05"))
 	// 睡眠一秒

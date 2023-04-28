@@ -73,4 +73,8 @@ go mod init go-learning
 - 19【时间日期】learning_time.go
 - 20【调用 C 函数】learning_call.go
 - 21【文件】learning_file.go
-- 22【并发编程】learning_goroutine.go
+- 22【并发编程(协程)】learning_goroutine.go
+- 23【并发编程(锁)】learning_lock.go(未完成)
+- 24【并发编程(管道)】learning_channel.go
+- 25【选择结构】learning_select.go
+- 26【定时器】learning_timer.go
