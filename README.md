@@ -52,21 +52,25 @@ go mod init go-learning
 ```
 
 ## 建议学习顺序
-- 【变量】learning_var.go
-- 【常量】learning_const.go
-- 【条件表达式】learning_if.go
-- 【循环】learning_for.go
-- 【switch】learning_switch.go  
-- 【枚举】learning_enum.go
-- 【函数】learning_func.go
-- 【字符串与数字互转】learning_strconv.go
-- 【http】learning_http.go
-- 【延迟调用】learning_defer.go
-- 【数组、切片】learning_array.go
-- 【map】learning_map.go
-- 【结构体、对象】learning_struct.go
-- 【指针】learning_point.go
-- 【接口】learning_interface.go
-- 【异常】learning_error.go
-- 【字符串相关】learning_string.go
-- 【正则】learning_regexp.go
+- 1【变量】learning_var.go
+- 2【常量】learning_const.go
+- 3【条件表达式】learning_if.go
+- 4【循环】learning_for.go
+- 5【switch】learning_switch.go  
+- 6【枚举】learning_enum.go
+- 7【函数】learning_func.go
+- 8【字符串与数字互转】learning_strconv.go
+- 9【http】learning_http.go
+- 10【延迟调用】learning_defer.go
+- 11【数组、切片】learning_array.go
+- 12【map】learning_map.go
+- 13【结构体、对象】learning_struct.go
+- 14【指针】learning_point.go
+- 15【接口】learning_interface.go
+- 16【异常(error、panic)】learning_error.go
+- 17【字符串相关(strings)】learning_string.go
+- 18【正则】learning_regexp.go
+- 19【时间日期】learning_time.go
+- 20【调用 C 函数】learning_call.go
+- 21【文件】learning_file.go
+- 22【并发编程】learning_goroutine.go
