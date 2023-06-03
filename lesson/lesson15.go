@@ -1,8 +1,6 @@
 package lesson
 
-import (
-	"sync"
-)
+import "sync"
 
 // 参考 乾航 分享的《Go 语言圣经》第九章《基于共享变量的并发》的内容
 // 在你个人目录下创建 lesson15.go ，然后完成以下练习题：
