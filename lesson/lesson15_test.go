@@ -45,4 +45,14 @@ func TestCache(t *testing.T) {
 	}
 	wg.Wait()
 	fmt.Println(cache.data)
+
+	cache.Set("k-string", "kkvv")
+	val1, _ := cache.Get("k-string")
+	println("any类型的输出：", val1)
+	println("any类型转string", val1.(string))
+
+	cache.Set("k-int", 22)
+	val2, _ := cache.Get("k-int")
+	println("any类型的输出：", val2)
+	println("any类型转string", val2.(int))
 }
