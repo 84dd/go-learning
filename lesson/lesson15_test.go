@@ -35,8 +35,8 @@ func TestCache(t *testing.T) {
 		}()
 	}
 	for i := 0; i < 10; i++ {
+		wg.Add(1)
 		go func() {
-			wg.Add(1)
 			cache.Set("k3", 33)
 			cache.Get("k3")
 			cache.Delete("k3")
