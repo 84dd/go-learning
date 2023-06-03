@@ -1,48 +1,44 @@
 package lesson
 
 import (
-	"fmt"
 	"sync"
 	"testing"
 )
 
 func TestCache(t *testing.T) {
-	cache := NewCache()
+	c := NewCache()
 
-	fmt.Println("单线程下测试cache的Set,Get,Delete功能")
-	cache.Set("k1", 11)
-	cache.Set("k1", 22)
-	fmt.Println(cache.Get("k1"))
-	cache.Delete("k1")
-	fmt.Println(cache.Get("k1"))
+	var wg sync.WaitGroup //创建一个等待组
+	wg.Add(4)             //等待组计数器+n
 
-	fmt.Println("多线程测试")
-	wg := sync.WaitGroup{}
-	for i := 0; i < 10; i++ {
-		wg.Add(3)
+	for i := 0; i < 2; i++ {
+		go func() {
+			c.Set("k1", "v1")
+			c.Delete("k1")
+			c.Set(string("k2"), "v2")
+			c.Set(string("k2"), "vv2") //更新
+			defer wg.Done()            //计数器减1
 
-		go func() {
-			cache.Set("k2", i)
-			wg.Done()
-		}()
-		go func() {
-			cache.Get("k2")
-			wg.Done()
-		}()
-		go func() {
-			cache.Delete("k2")
-			wg.Done()
 		}()
 	}
-	for i := 0; i < 10; i++ {
-		wg.Add(1)
+	for j := 0; j < 2; j++ {
 		go func() {
-			cache.Set("k3", 33)
-			cache.Get("k3")
-			cache.Delete("k3")
 			defer wg.Done()
+			c.Set("k3", "v3")
+			c.Set(string("k3"), "vv3") //更新
+			c.Delete("k3")             //删除
+
 		}()
 	}
 	wg.Wait()
-	fmt.Println(cache.data)
+
+	c.Set("k-string", "kkvv")
+	val1, _ := c.Get("k-string")
+	println("any类型的输出：", val1)
+	println("any类型转string", val1.(string))
+
+	c.Set("k-int", 22)
+	val2, _ := c.Get("k-int")
+	println("any类型的输出：", val2)
+	println("any类型转string", val2.(int))
 }
