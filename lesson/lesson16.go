@@ -1,6 +1,7 @@
 package lesson
 
 import (
+	"fmt"
 	"sync"
 	"time"
 )
@@ -51,25 +52,41 @@ func NewTaskScheduler() *TaskScheduler {
 
 // 注册某个点执行的任务
 func (s *TaskScheduler) RegisterTask(id string, t time.Time, f func()) {
-	// 你的代码
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.tasks[id] = Task{execTime: t, f: f}
 }
 
 // 注册以某个固定频率执行的任务
 func (s *TaskScheduler) RegisterScheduleTask(id string, interval time.Duration, f func()) {
-	// 你的代码
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	s.tasks[id] = Task{interval: interval, f: f}
 }
 
 // 取消任务
 func (s *TaskScheduler) CancelTask(id string) {
-	// 你的代码
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	delete(s.tasks, id)
 }
 
 // 启动调度器
 func (s *TaskScheduler) Start() {
-	// 你的代码
+	for {
+		time.Sleep(time.Second) // 设定检查任务是否需要执行的间隔时间，这里设定为 1 秒
+		s.mu.Lock()
+		for _, task := range s.tasks {
+			fmt.Println(task)
+		}
+		s.mu.Unlock()
+	}
 }
 
 // 停止调度器
 func (s *TaskScheduler) Stop() {
-	// 你的代码
+	// 关闭信号通道，通知所有执行中的任务调度器已关闭，不再注册新任务或执行任务。
+	// 这里使用一个无缓冲的通道，以便可以及时通知到所有执行中的任务。
+	// 如果使用有缓冲的通道，可能有些任务无法及时接收到信号，导致调度器无法及时停止。
+	close(s.stop)
 }
