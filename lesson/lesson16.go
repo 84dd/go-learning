@@ -52,8 +52,9 @@ func NewTaskScheduler() *TaskScheduler {
 
 // 注册某个点执行的任务
 func (s *TaskScheduler) RegisterTask(id string, t time.Time, f func()) {
-	s.mu.Lock()
-	defer s.mu.Unlock()
+	s.mu.Lock()         // 上锁
+	defer s.mu.Unlock() // 解锁
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), "注册某个点执行的任务", id)
 	s.tasks[id] = Task{execTime: t, f: f}
 }
 
@@ -61,6 +62,7 @@ func (s *TaskScheduler) RegisterTask(id string, t time.Time, f func()) {
 func (s *TaskScheduler) RegisterScheduleTask(id string, interval time.Duration, f func()) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), "注册以某个固定频率执行的任务", id)
 	s.tasks[id] = Task{interval: interval, f: f}
 }
 
@@ -68,16 +70,37 @@ func (s *TaskScheduler) RegisterScheduleTask(id string, interval time.Duration, 
 func (s *TaskScheduler) CancelTask(id string) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	delete(s.tasks, id)
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), "取消任务", id)
+	delete(s.tasks, id) // 删除任务
 }
 
 // 启动调度器
 func (s *TaskScheduler) Start() {
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), "启动调度器")
 	for {
-		time.Sleep(time.Second) // 设定检查任务是否需要执行的间隔时间，这里设定为 1 秒
+		time.Sleep(100 * time.Millisecond) // 设定检查任务是否需要执行的间隔时间，这里设定为 100 豪秒
 		s.mu.Lock()
-		for _, task := range s.tasks {
-			fmt.Println(task)
+		for id, task := range s.tasks {
+			if task.interval == 0 {
+				// 某个点执行的任务
+				if time.Now().After(task.execTime) {
+					s.wg.Add(1)
+					task.f()
+					s.wg.Done()
+					delete(s.tasks, id) // 删除任务
+				}
+			} else {
+				// 以某个固定频率执行的任务
+				s.wg.Add(1)
+				select {
+				case <-time.After(task.interval):
+					task.f() // 频率内执行任务，而且执行完后不删除任务
+					s.wg.Done()
+				case <-s.stop:
+					// 调度器已关闭，不执行任务
+					s.wg.Done()
+				}
+			}
 		}
 		s.mu.Unlock()
 	}
@@ -88,5 +111,6 @@ func (s *TaskScheduler) Stop() {
 	// 关闭信号通道，通知所有执行中的任务调度器已关闭，不再注册新任务或执行任务。
 	// 这里使用一个无缓冲的通道，以便可以及时通知到所有执行中的任务。
 	// 如果使用有缓冲的通道，可能有些任务无法及时接收到信号，导致调度器无法及时停止。
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), "停止调度器")
 	close(s.stop)
 }

@@ -8,50 +8,41 @@ import (
 
 func TestTaskScheduler(t *testing.T) {
 	ts := NewTaskScheduler()
-	fmt.Println(ts)
-	defer ts.Stop()
-	ts.Start()
 
-	// 注册任务 1，设置执行时间为当前时间 + 5 秒，执行函数为打印任务 ID
-	ts.RegisterTask(
-		"task001",
-		time.Now().Add(5*time.Second),
-		func() { fmt.Println(time.Now().Format("2006-01-02 15:04:05"), " task001") },
-	)
+	// 注册任务 1
+	ts.RegisterTask("task001", time.Now().Add(3*time.Second), func() { printId("task001") })
 
-	// 注册任务 2，设置执行时间为当前时间 + 10 秒，执行函数为打印任务 ID
-	ts.RegisterTask(
-		"task002",
-		time.Now().Add(10*time.Second),
-		func() { fmt.Println(time.Now().Format("2006-01-02 15:04:05"), " task002") },
-	)
+	// 注册任务 2
+	ts.RegisterTask("task002", time.Now().Add(10*time.Second), func() { printId("task002") })
 
 	// 注册任务 3，但又马上取消
-	ts.RegisterTask(
-		"task003",
-		time.Now().Add(10*time.Second),
-		func() { fmt.Println(time.Now().Format("2006-01-02 15:04:05"), " task003") },
-	)
+	ts.RegisterTask("task003", time.Now().Add(10*time.Second), func() { printId("task003") })
 	ts.CancelTask("task003")
 
-	// 等待 15 秒，确保任务调度器有足够的时间执行任务
-	time.Sleep(15 * time.Second)
+	// 注册任务 4
+	ts.RegisterScheduleTask("task004", 3*time.Second, func() { printId("task004") })
 
-	// 注册任务 4，设置执行间隔为 5 秒，执行函数为打印任务 ID
-	ts.RegisterScheduleTask(
-		"task004",
-		5*time.Second,
-		func() { fmt.Println(time.Now().Format("2006-01-02 15:04:05"), " task004") },
-	)
+	// 注册任务 5
+	ts.RegisterScheduleTask("task005", time.Second, func() { printId("task005") })
 
-	// 注册任务 5，但又马上取消
-	ts.RegisterScheduleTask(
-		"task005",
-		5*time.Second,
-		func() { fmt.Println(time.Now().Format("2006-01-02 15:04:05"), " task005") },
-	)
-	ts.CancelTask("task005")
+	// 注册任务 6，但又马上取消
+	ts.RegisterScheduleTask("task006", 5*time.Second, func() { printId("task006") })
+	ts.CancelTask("task006")
 
-	// 等待一段时间，确保任务调度器有足够的时间执行任务
-	time.Sleep(60 * time.Second)
+	go ts.Start()
+
+	// 开始任务8秒后，将任务2、4取消，所以任务2永远不会被执行，任务4会被执行两次
+	time.Sleep(8 * time.Second)
+	ts.CancelTask("task002")
+	ts.CancelTask("task004")
+
+	// 再过10秒后，停止任务调度器
+	time.Sleep(10 * time.Second)
+	ts.Stop()
+	ts.wg.Wait() // 等待
+}
+
+// 打印id
+func printId(id string) {
+	fmt.Println(time.Now().Format("2006-01-02 15:04:05"), "执行任务-->>>", id)
 }
